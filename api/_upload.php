@@ -34,7 +34,7 @@ function _append($ext, $dir, $slug, $data){
 }
 
 
-function _commit($ext, $dir, $slug){
+function _commit($ext, $dir, $slug, $copyName = ""){
     
     $locl = "../public/$dir/$slug.$ext.ghost";
     $finl = "../public/$dir/$slug.$ext";
@@ -42,6 +42,8 @@ function _commit($ext, $dir, $slug){
 
     try {
         rename($locl, $finl);
+        if($copyName != "")
+            copy($finl, "$copyName.$ext");
         return $file;
     } catch (\Throwable $th) {
         return false;

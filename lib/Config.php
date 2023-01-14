@@ -6,6 +6,7 @@ class Config {
 
     private static $instance = false;
     private $data, $url, $api;
+    private $pair = "";
 
     private function __construct(){
         $this->data = json_decode(file_get_contents('../config.json'), true);
@@ -46,6 +47,16 @@ class Config {
     public static function is_in_production(){
 
         return self::instance()->data['type'] == 'prod';
+    }
+
+    public static function pair(){
+
+        if(self::instance()->pair == ""){
+            self::instance()->pair = 
+            file_get_contents("../pair_".self::instance()->data['type'].".txt");
+        }
+
+        return self::instance()->pair;
     }
 
 }

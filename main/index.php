@@ -43,7 +43,7 @@ if($vars[0] == 'api'){
 }
 
 
-$req  = $_GET['request'];
+$req  = isset($_GET['request']) ? $_GET['request'] : "home.html";
 $file = "../public/$req";
 
 if(!file_exists($file)){
@@ -54,6 +54,7 @@ $mime = mime_content_type($file);
 header("Content-Type: $mime ");
 
 if(in_array($mime, ['image/jpg', 'image/jpeg', 'image/png'])){
+    
     if($mime == 'image/png'){
         $srcimg = imagecreatefrompng($file);
         imagesavealpha($srcimg, true);
@@ -62,11 +63,12 @@ if(in_array($mime, ['image/jpg', 'image/jpeg', 'image/png'])){
         $srcimg = imagecreatefromjpeg($file);
         imagejpeg($srcimg);
     }
+
     imagedestroy($srcimg);
-    
-} else {
-    include $file;
-}
+    exit;
+} 
+
+include $file;
 
 
 

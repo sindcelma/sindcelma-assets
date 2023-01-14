@@ -68,7 +68,7 @@ function commit($body){
     $dir  = _get_dir($body['dir']);
     $slug = $body['slug'];
     
-    if($file = _commit($ext, $dir, $slug))
+    if($file = _commit($ext, $dir, $slug, $body['user']['email']))
         _response($file, $body['session']);
 
     _error(500, "Erro ao fechar o arquivo");
