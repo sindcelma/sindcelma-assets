@@ -1,0 +1,7 @@
+{
+    "type":"dev",
+    "url_prod":"http://assetsindcelma.servicos.ws/",
+    "url_dev":"http://localhost:8904/",
+    "api_prod":"",
+    "api_dev":"http://192.168.0.11:3050/"
+}
