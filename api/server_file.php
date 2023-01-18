@@ -21,8 +21,8 @@ function add_random_fav($body){
     $email = $body['email'];
 
     $arr = ['arara-azul', 'ariranha', 'mico-leao-dourado', 'onca-pintada', 'peixe-boi', 'tamandua'];
-    $img = "../public/images/padroes/".$arr[mt_rand(0, 5)].".jpg";
-    $to  = "../public/images/fav/$email.jpg";
+    $img = "images/padroes/".$arr[mt_rand(0, 5)].".jpg";
+    $to  = "images/fav/$email.jpg";
     
     try {
         copy($img, $to);

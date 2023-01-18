@@ -44,31 +44,11 @@ if($vars[0] == 'api'){
 
 
 $req  = isset($_GET['request']) ? $_GET['request'] : "home.html";
-$file = "../public/$req";
+$file = $req;
 
 if(!file_exists($file)){
     _error();
 }
-
-$mime = mime_content_type($file);
-header("Content-Type: $mime ");
-
-if(in_array($mime, ['image/jpg', 'image/jpeg', 'image/png'])){
-    
-    if($mime == 'image/png'){
-        $srcimg = imagecreatefrompng($file);
-        imagesavealpha($srcimg, true);
-        imagepng($srcimg);
-    } else {
-        $srcimg = imagecreatefromjpeg($file);
-        imagejpeg($srcimg);
-    }
-
-    imagedestroy($srcimg);
-    exit;
-} 
-
-include $file;
 
 
 

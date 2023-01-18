@@ -2,10 +2,13 @@
 
 use lib\Config as Config;
 
+use lib\images\EditImage as image;
+
+
 function _create_ghost($ext, $dir, $id){
 
     $slug = _generateUniqueSlug($id);
-    $locl = "../public/$dir/$slug.$ext.ghost";
+    $locl = "$dir/$slug.$ext.ghost";
 
     try {
         file_put_contents($locl, "");
@@ -21,7 +24,7 @@ function _append($ext, $dir, $slug, $data){
 
     sleep(1);
 
-    $locl = "../public/$dir/$slug.$ext.ghost";
+    $locl = "$dir/$slug.$ext.ghost";
 
     try {
         $data = base64_decode($data);
@@ -34,17 +37,25 @@ function _append($ext, $dir, $slug, $data){
 }
 
 
-function _commit($ext, $dir, $slug, $copyName = ""){
+function _commit($ext, $dir, $slug, $copyName = "", $local = ""){
     
-    $locl = "../public/$dir/$slug.$ext.ghost";
-    $finl = "../public/$dir/$slug.$ext";
+    $locl = "$dir/$slug.$ext.ghost";
+    $finl = "$dir/$slug.$ext";
     $file = Config::url()."$dir/$slug.$ext";
 
     try {
+        
         rename($locl, $finl);
-        if($copyName != "")
-            copy($finl, "$copyName.$ext");
+        
+        if($copyName != ""){
+            
+            $rootCopy = "$local$copyName.$ext";
+            copy($finl, $rootCopy);
+            
+        }
+
         return $file;
+    
     } catch (\Throwable $th) {
         return false;
     }
