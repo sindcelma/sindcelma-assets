@@ -17,7 +17,6 @@ function _init(&$body){
 
 }
 
-
 function create($body){
 
     if(!_isset_in(['ext', 'dir', 'user'], array_keys($body)))

@@ -1,7 +1,7 @@
 {
     "type":"dev",
-    "url_prod":"http://assetsindcelma.servicos.ws/",
-    "url_dev":"http://localhost:8904/",
-    "api_prod":"",
+    "url_prod":"http://assetsindcelma.com.br/",
+    "url_dev":"http://192.168.0.11:8904/",
+    "api_prod":"http://sindcelmatecnologia.com.br/",
     "api_dev":"http://192.168.0.11:3050/"
 }
