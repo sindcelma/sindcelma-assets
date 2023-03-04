@@ -14,7 +14,7 @@ class Session {
         if(!$sess || trim($sess) == "") return;
         
         try {
-
+            
             $ch      = curl_init( Config::api()."user/get_user" );
             $payload = json_encode(['session' => $sess]);
 

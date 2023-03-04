@@ -4,13 +4,33 @@ require "../autoload.php";
 require "../helpers/request.php";
 require "../helpers/response.php";
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+
 $vars = _request()->vars;
+
+if($vars[0] == 'file'){
+    // forçar download do arquivo se ele existir
+    $body    = _request()->raw();
+    if(!isset($body['session'])) exit("Este arquivo não existe!");
+        
+    $session = new lib\Session($body['session']);
+    $file    = '../files/'.$vars[1];
+
+    if(!$session->isAdmin()) exit("Você não tem permissão para acessar este arquivo!");
+    if(!file_exists($file))  exit("Este arquivo não existe!");
+
+    header('Content-Type: application/octet-stream');
+    header("Content-Transfer-Encoding: Binary"); 
+    header("Content-disposition: attachment; filename=\"" . basename($file) . "\""); 
+    
+    return readfile($file);
+
+}   
 
 if($vars[0] == 'api'){
     
     header('Content-Type: application/json; charset=utf-8');
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: *");
 
     if(count($vars) < 3) {
         _error(400, "Bad Request");
@@ -40,8 +60,8 @@ if($vars[0] == 'api'){
         $func($body);
 
     })($vars[1], $vars[2]);
-}
 
+}
 
 $req  = isset($_GET['request']) ? $_GET['request'] : "home.html";
 $file = $req;
