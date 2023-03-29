@@ -1,32 +1,51 @@
 <?php 
 
+use lib\Config as Config;
+
 include "_upload.php";
 
 function _init(&$body){
 
-    if(!$body['session'])
+    if(!$body['pair'])
         _error(400, 'bad request');
 
-    $session = new lib\Session($body['session']);
-
-    if(!$session->isAdmin())
+    if(Config::pair() != $body['pair'])
         _error(401, 'unauthorized');
 
-    $body['session'] = $session->getSession();
-    $body['user']    = $session->getUser();
+}
+
+function change_name($body){
+
+    if(!_isset_in(['ext', 'dir', 'old', 'new'], array_keys($body)))
+        _error(400, 'bad request');
+
+    $ext = $body['ext'];
+    $dir = $body['dir'];
+    $new = $body['new'];
+    $old = $body['old'];
+
+    $file_old = "$dir/$old.$ext";
+    $file_new = "$dir/$new.$ext";
+
+    try {
+        rename($file_old, $file_new);
+        _response($file_new);
+    } catch (\Throwable $th) {
+        _error(500, "Erro ao tentar renomear arquivo");
+    }
 
 }
 
 function create($body){
 
-    if(!_isset_in(['ext', 'dir', 'user'], array_keys($body)))
+    if(!_isset_in(['ext', 'dir', 'salt'], array_keys($body)))
         _error(400, 'bad request');
         
     $ext  = $body['ext'];
     $dir  = $body['dir'];
     
-    if($slug = _create_ghost($ext, $dir, $body['user']['id'])){
-        _response(['slug' => $slug], $body['session']);
+    if($slug = _create_ghost($ext, $dir, $body['salt'])){
+        _response(['slug' => $slug]);
     }
 
     _error(500, "Erro ao tentar criar o arquivo");
@@ -36,7 +55,7 @@ function create($body){
 
 function append($body){
 
-    if(!_isset_in(['ext', 'dir', 'data', 'slug', 'user'], array_keys($body)))
+    if(!_isset_in(['ext', 'dir', 'data', 'slug'], array_keys($body)))
         _error(400, 'bad request');
 
     $ext  = $body['ext'];
@@ -44,7 +63,7 @@ function append($body){
     $slug = $body['slug'];
     
     if(_append($ext, $dir, $slug, $body['data'])){
-        _response($slug, $body['session']);
+        _response($slug);
     }
 
     _error(500, "Erro ao tentar inserir conteudo no arquivo");
@@ -54,7 +73,7 @@ function append($body){
 
 function commit($body){
 
-    if(!_isset_in(['ext', 'dir', 'slug', 'user'], array_keys($body)))
+    if(!_isset_in(['ext', 'dir', 'slug'], array_keys($body)))
         _error(400, 'bad request');
 
     $ext  = $body['ext'];
@@ -62,7 +81,7 @@ function commit($body){
     $slug = $body['slug'];
     
     if($file = _commit($ext, $dir, $slug)){
-        _response($file, $body['session']);
+        _response($file);
     }
 
     _error(500, "Erro ao fechar o arquivo");

@@ -5,9 +5,9 @@ use lib\Config as Config;
 use lib\images\EditImage as image;
 
 
-function _create_ghost($ext, $dir, $id){
+function _create_ghost($ext, $dir, $salt){
 
-    $slug = _generateUniqueSlug($id);
+    $slug = _generateUniqueSlug($salt);
     $locl = "$dir/$slug.$ext.ghost";
 
     try {

@@ -28,3 +28,11 @@ function csv($body){
     _response($fname);
 
 }
+
+function pdf($body){
+
+    $fname = sha1($body['name'].mt_rand(0,1000).date('dmyhis')).".pdf";
+
+    
+
+}
