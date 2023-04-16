@@ -1,7 +1,7 @@
 {
-    "type":"dev",
+    "type":"prod",
     "url_prod":"http://assetsindcelma.com.br/",
-    "url_dev":"http://192.168.0.11:8904/",
+    "url_dev":"http://172.17.0.4/",
     "api_prod":"http://sindcelmatecnologia.com.br/",
     "api_dev":"http://192.168.0.11:3050/"
 }

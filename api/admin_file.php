@@ -80,7 +80,10 @@ function commit($body){
     $dir  = $body['dir'];
     $slug = $body['slug'];
     
-    if($file = _commit($ext, $dir, $slug)){
+    $copyName = isset($body['copy']) ? $body['copy'] : "";
+    $to = isset($body['to']) ? $body['to'] : "";
+
+    if($file = _commit($ext, $dir, $slug, $copyName, $to)){
         _response($file);
     }
 

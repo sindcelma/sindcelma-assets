@@ -9,9 +9,7 @@ header("Access-Control-Allow-Headers: *");
 
 use lib\Config as Config;
 
-if(Config::is_in_production()){
-    ini_set('display_errors', 0);
-}
+ini_set('display_errors', 0);
 
 $vars = _request()->vars;
 
