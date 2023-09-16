@@ -4,16 +4,19 @@ include "_upload.php";
 
 function _init(&$body){
 
-    if(!$body['session'])
+    if(!isset($body['session']) && !isset($body['user']))
         _error(400, 'bad request 1');
 
-    $session = new lib\Session($body['session']);
+    if(isset($body['session'])){
+        $session = new lib\Session($body['session']);
 
-    if(!$session->isSocio())
-        _error(401, 'unauthorized');
+        if(!$session->isSocio())
+            _error(401, 'unauthorized');
 
-    $body['session'] = $session->getSession();
-    $body['user']    = $session->getUser();
+        $body['session'] = $session->getSession();
+        $body['user']    = $session->getUser();
+    }
+    
 }
 
 
@@ -35,8 +38,8 @@ function create($body){
     $ext  = $body['ext'];
     $dir  = _get_dir($body['dir']);
     
-    if($slug = _create_ghost($ext, $dir, $body['user']['id'])){
-        _response(['slug' => $slug], $body['session']);
+    if($slug = _create_ghost($ext, $dir, isset($body['user']['id']) ? $body['user']['id'] : $body['user'])){
+        _response(['slug' => $slug], isset($body['session']) ? $body['session'] : "");
     }
 
     _error(500, "Erro ao tentar criar o arquivo");
@@ -53,7 +56,7 @@ function append($body){
     $slug = $body['slug'];
     
     if(_append($ext, $dir, $slug, $body['data'])){
-        _response($slug, $body['session']);
+        _response($slug, isset($body['session']) ? $body['session'] : "");
     }
 
     _error(500, "Erro ao tentar inserir conteudo no arquivo");
@@ -73,15 +76,15 @@ function commit($body){
     $loc  = "";
 
     if($body['dir'] != 'doc'){
-        $copy = $body['user']['email'];
+        $copy = isset($body['user']['email']) ? $body['user']['email'] : "";
+        $copy = isset($body["copy"]) ? $body["copy"] : "";
         $loc  = "images/fav/";
     }
     
     if($file = _commit($ext, $dir, $slug, $copy, $loc)){
-        _response($file, $body['session']);
+        _response($file, isset($body['session']) ? $body['session'] : "");
     }
         
-
     _error(500, "Erro ao fechar o arquivo");
 
 }

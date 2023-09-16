@@ -57,6 +57,7 @@ function _commit($ext, $dir, $slug, $copyName = "", $local = ""){
         return $file;
     
     } catch (\Throwable $th) {
+        print_r($th);
         return false;
     }
 
