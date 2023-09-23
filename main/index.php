@@ -9,9 +9,15 @@ header("Access-Control-Allow-Headers: *");
 
 use lib\Config as Config;
 
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
 $vars = _request()->vars;
+
+if ($vars[0] == "public_files"){
+    require_once "../helpers/files.php";
+    fichas($vars[1]);
+    return;
+}
 
 if($vars[0] == 'file'){
     // forçar download do arquivo se ele existir
